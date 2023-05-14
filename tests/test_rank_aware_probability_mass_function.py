@@ -14,6 +14,7 @@ def test_calc_rank_aware_pmf() -> None:
         "b": (calc_rank_weight_MMR(2) + calc_rank_weight_MMR(3))
         / (calc_rank_weight_MMR(1) + calc_rank_weight_MMR(2) + calc_rank_weight_MMR(3)),
     }
+    print(Q_asterisk_expected)
 
     Q_asterisk_actual = RankAwareProbabilityMassFunction.from_ranking(R)
     assert [
