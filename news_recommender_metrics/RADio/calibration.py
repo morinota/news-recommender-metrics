@@ -1,10 +1,26 @@
-from typing import Any, List
+from typing import Any, Dict, List
+
+from pydantic.dataclasses import dataclass
 
 from news_recommender_metrics.RADio.dart_metrics_abstract import DartMetricsAbstract
-from news_recommender_metrics.RADio.rank_aware_probability_mass_function import RankAwareProbabilityMassFunction
+from news_recommender_metrics.RADio.divergence_metrics import (
+    DivergenceMetricAbstract,
+    JSDivergence,
+)
+from news_recommender_metrics.utils.probability_mass_function.probability_mass_function import (
+    ProbabilityMassFunction,
+)
+from news_recommender_metrics.utils.probability_mass_function.rank_aware_probability_mass_function import (
+    RankAwareProbabilityMassFunction,
+)
 
 
+@dataclass
 class Calibration(DartMetricsAbstract):
+    value: float
+    P_dist: Dict[Any, float]
+    Q_dist: Dict[Any, float]
+
     @classmethod
     def calc(
         cls,
@@ -31,5 +47,21 @@ class Calibration(DartMetricsAbstract):
         Calibration
             Calibration of the item attribute.
         """
-        P = RankAwareProbabilityMassFunction.from_ranking(reading_history)
-        Q = RankAwareProbabilityMassFunction.from_ranking(recommendations, rank_weight_method)
+
+        P_dist = ProbabilityMassFunction.from_list(reading_history)
+
+        Q_dist = (
+            RankAwareProbabilityMassFunction.from_ranking(
+                recommendations, rank_weight_method
+            )
+            if is_rank_aware
+            else ProbabilityMassFunction.from_list(recommendations)
+        )
+        calculator = JSDivergence()
+        value = calculator.calc(P_dist.pmf, Q_dist.pmf)
+
+        return Calibration(
+            value=value,
+            P_dist=P_dist.pmf,
+            Q_dist=Q_dist.pmf,
+        )

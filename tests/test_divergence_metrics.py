@@ -6,9 +6,9 @@ from news_recommender_metrics.RADio.divergence_metrics import JSDivergence, KLDi
 def test_calc_KL_divergence() -> None:
     P = {"a": 0.2, "b": 0.3, "c": 0.5}
     Q = {"a": 0.3, "b": 0.3, "c": 0.4}
-    kl_div_PQ_expected = -(0.2 * math.log2(0.3) + 0.3 * math.log2(0.3) + 0.5 * math.log2(0.4)) + (
-        0.2 * math.log2(0.2) + 0.3 * math.log2(0.3) + 0.5 * math.log2(0.5)
-    )
+    kl_div_PQ_expected = -(
+        0.2 * math.log2(0.3) + 0.3 * math.log2(0.3) + 0.5 * math.log2(0.4)
+    ) + (0.2 * math.log2(0.2) + 0.3 * math.log2(0.3) + 0.5 * math.log2(0.5))
 
     calculator = KLDivergence()
     kl_div_PQ_actual = calculator.calc(P, Q)
@@ -28,8 +28,12 @@ def test_calc_JS_divergence() -> None:
         - (0.3 + 0.3) / 2 * math.log2((0.3 + 0.3) / 2)
         - (0.5 + 0.4) / 2 * math.log2((0.5 + 0.4) / 2)
     )
-    js_div_second_term = 1 / 2 * (0.2 * math.log2(0.2) + 0.3 * math.log2(0.3) + 0.5 * math.log2(0.5))
-    js_div_third_term = 1 / 2 * (0.3 * math.log2(0.3) + 0.3 * math.log2(0.3) + 0.4 * math.log2(0.4))
+    js_div_second_term = (
+        1 / 2 * (0.2 * math.log2(0.2) + 0.3 * math.log2(0.3) + 0.5 * math.log2(0.5))
+    )
+    js_div_third_term = (
+        1 / 2 * (0.3 * math.log2(0.3) + 0.3 * math.log2(0.3) + 0.4 * math.log2(0.4))
+    )
     js_div_PQ_expected = js_div_first_term + js_div_second_term + js_div_third_term
 
     calculator = JSDivergence()

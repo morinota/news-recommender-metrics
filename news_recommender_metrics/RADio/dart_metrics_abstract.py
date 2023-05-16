@@ -1,6 +1,7 @@
 import abc
-from dataclasses import dataclass
 from typing import Any, Dict
+
+from pydantic.dataclasses import dataclass
 
 
 @dataclass

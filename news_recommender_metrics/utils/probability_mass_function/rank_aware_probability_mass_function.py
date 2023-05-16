@@ -9,12 +9,18 @@ class RankAwareProbabilityMassFunction:
     pmf: Dict[Any, float]
 
     @classmethod
-    def from_ranking(cls, R: List[Any], method: str = "MMR") -> "RankAwareProbabilityMassFunction":
+    def from_ranking(
+        cls, R: List[Any], method: str = "MMR"
+    ) -> "RankAwareProbabilityMassFunction":
         rank_aware_pmf = defaultdict(float)
-        rank_weights_sum = sum([cls._calc_rank_weight(rank_idx + 1, method) for rank_idx in range(len(R))])
+        rank_weights_sum = sum(
+            [cls._calc_rank_weight(rank_idx + 1, method) for rank_idx in range(len(R))]
+        )
         for rank_idx in range(len(R)):
             rank = rank_idx + 1
-            rank_aware_pmf[R[rank_idx]] += cls._calc_rank_weight(rank, method) / rank_weights_sum
+            rank_aware_pmf[R[rank_idx]] += (
+                cls._calc_rank_weight(rank, method) / rank_weights_sum
+            )
         return RankAwareProbabilityMassFunction(rank_aware_pmf)
 
     @classmethod

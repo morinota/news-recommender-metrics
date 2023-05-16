@@ -1,6 +1,8 @@
 import math
 
-from news_recommender_metrics.RADio.rank_aware_probability_mass_function import RankAwareProbabilityMassFunction
+from news_recommender_metrics.utils.probability_mass_function.rank_aware_probability_mass_function import (
+    RankAwareProbabilityMassFunction,
+)
 
 
 def calc_rank_weight_MMR(rank: int) -> float:
@@ -10,7 +12,8 @@ def calc_rank_weight_MMR(rank: int) -> float:
 def test_calc_rank_aware_pmf() -> None:
     R = ["a", "b", "b"]
     Q_asterisk_expected = {
-        "a": calc_rank_weight_MMR(1) / (calc_rank_weight_MMR(1) + calc_rank_weight_MMR(2) + calc_rank_weight_MMR(3)),
+        "a": calc_rank_weight_MMR(1)
+        / (calc_rank_weight_MMR(1) + calc_rank_weight_MMR(2) + calc_rank_weight_MMR(3)),
         "b": (calc_rank_weight_MMR(2) + calc_rank_weight_MMR(3))
         / (calc_rank_weight_MMR(1) + calc_rank_weight_MMR(2) + calc_rank_weight_MMR(3)),
     }
